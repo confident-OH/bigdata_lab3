@@ -1,0 +1,1 @@
+/usr/bin/g++  -g   CMakeFiles/Merkle.dir/main.cpp.o CMakeFiles/Merkle.dir/M_tree.cpp.o  -o Merkle 

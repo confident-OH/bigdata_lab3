@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/leo/CLionProjects/Merkle/M_tree.h
+picosha2.h
+/home/leo/CLionProjects/Merkle/picosha2.h
+
+/home/leo/CLionProjects/Merkle/main.cpp
+iostream
+-
+M_tree.h
+/home/leo/CLionProjects/Merkle/M_tree.h
+
+/home/leo/CLionProjects/Merkle/picosha2.h
+algorithm
+-
+cassert
+-
+iterator
+-
+sstream
+-
+vector
+-
+fstream
+-
+
