@@ -197,6 +197,33 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Merkle.dir/build.make CMakeFiles/Merkle.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+sha256.o: sha256.cpp.o
+
+.PHONY : sha256.o
+
+# target to build an object file
+sha256.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Merkle.dir/build.make CMakeFiles/Merkle.dir/sha256.cpp.o
+.PHONY : sha256.cpp.o
+
+sha256.i: sha256.cpp.i
+
+.PHONY : sha256.i
+
+# target to preprocess a source file
+sha256.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Merkle.dir/build.make CMakeFiles/Merkle.dir/sha256.cpp.i
+.PHONY : sha256.cpp.i
+
+sha256.s: sha256.cpp.s
+
+.PHONY : sha256.s
+
+# target to generate assembly for a file
+sha256.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Merkle.dir/build.make CMakeFiles/Merkle.dir/sha256.cpp.s
+.PHONY : sha256.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -212,6 +239,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... sha256.o"
+	@echo "... sha256.i"
+	@echo "... sha256.s"
 .PHONY : help
 
 

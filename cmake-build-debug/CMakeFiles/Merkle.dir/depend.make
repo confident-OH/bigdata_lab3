@@ -3,9 +3,12 @@
 
 CMakeFiles/Merkle.dir/M_tree.cpp.o: ../M_tree.cpp
 CMakeFiles/Merkle.dir/M_tree.cpp.o: ../M_tree.h
-CMakeFiles/Merkle.dir/M_tree.cpp.o: ../picosha2.h
+CMakeFiles/Merkle.dir/M_tree.cpp.o: ../sha256.h
 
 CMakeFiles/Merkle.dir/main.cpp.o: ../M_tree.h
 CMakeFiles/Merkle.dir/main.cpp.o: ../main.cpp
-CMakeFiles/Merkle.dir/main.cpp.o: ../picosha2.h
+CMakeFiles/Merkle.dir/main.cpp.o: ../sha256.h
+
+CMakeFiles/Merkle.dir/sha256.cpp.o: ../sha256.cpp
+CMakeFiles/Merkle.dir/sha256.cpp.o: ../sha256.h
 

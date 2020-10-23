@@ -93,7 +93,10 @@
 		<Unit filename="/home/leo/CLionProjects/Merkle/main.cpp">
 			<Option target="Merkle"/>
 		</Unit>
-		<Unit filename="/home/leo/CLionProjects/Merkle/picosha2.h">
+		<Unit filename="/home/leo/CLionProjects/Merkle/sha256.cpp">
+			<Option target="Merkle"/>
+		</Unit>
+		<Unit filename="/home/leo/CLionProjects/Merkle/sha256.h">
 			<Option target="Merkle"/>
 		</Unit>
 		<Unit filename="/home/leo/CLionProjects/Merkle/CMakeLists.txt">

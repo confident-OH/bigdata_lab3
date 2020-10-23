@@ -6,27 +6,37 @@
 
 #IncludeRegexTransform: 
 
-/home/leo/CLionProjects/Merkle/M_tree.h
-picosha2.h
-/home/leo/CLionProjects/Merkle/picosha2.h
-
-/home/leo/CLionProjects/Merkle/main.cpp
-iostream
--
+/home/leo/CLionProjects/Merkle/M_tree.cpp
 M_tree.h
 /home/leo/CLionProjects/Merkle/M_tree.h
 
-/home/leo/CLionProjects/Merkle/picosha2.h
-algorithm
+/home/leo/CLionProjects/Merkle/M_tree.h
+sha256.h
+/home/leo/CLionProjects/Merkle/sha256.h
+sys/types.h
 -
-cassert
--
-iterator
--
-sstream
+dirent.h
 -
 vector
 -
+string
+-
+algorithm
+-
+iostream
+-
 fstream
+-
+
+/home/leo/CLionProjects/Merkle/sha256.h
+stdio.h
+-
+stdlib.h
+-
+stdint.h
+-
+memory.h
+-
+string.h
 -
 

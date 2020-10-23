@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Merkle.dir/M_tree.cpp.o"
   "CMakeFiles/Merkle.dir/main.cpp.o"
+  "CMakeFiles/Merkle.dir/sha256.cpp.o"
   "Merkle"
   "Merkle.pdb"
 )
