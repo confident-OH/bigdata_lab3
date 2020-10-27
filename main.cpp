@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
             case '1':
             {
                 cout << "**************** We are building the Merkle tree. Please wait... ****************" << endl;
+                mtree_head.folder_name1 = string(argv[1]);
                 mtree_head.build(argv[1], 1);
                 mtree_head.show(1);
                 break;
@@ -43,13 +44,20 @@ int main(int argc, char *argv[]) {
             }
             case '3':
             {
+                mtree_head.build(argv[1], 1);
+                mtree_head.folder_name1 = string(argv[1]);
                 if(argc == 2){
                     cout << "Please input the address, we will check their difference." << endl;
-
                     cin >> check_fold;
+                    mtree_head.folder_name2 = string(check_fold);
+                    mtree_head.build(check_fold, 3);
                 }
-
+                else{
+                    mtree_head.folder_name2 = string(argv[2]);
+                    mtree_head.build(argv[2], 3);
+                }
                 cout << "**************** We are checking the difference. Please wait... ****************" << endl;
+                mtree_head.compare();
                 break;
             }
             case 'q':
@@ -67,35 +75,3 @@ int main(int argc, char *argv[]) {
         }
     }//结束大循环
 }
-
-/*
-                    char a1[100] = "jjjjjjj";
-                    char a2[100] = "kkkkkkk";
-                    char a3[100] = "lllllll";
-                    int i;
-                    uint32_t b1[8], b2[8], b3[8];
-
-                    sha256((uint8_t*)a1, strlen(a1), b1);
-                    sha256((uint8_t*)a2, strlen(a2), b2);
-                    sha256((uint8_t*)a3, strlen(a3), b3);
-
-                    hash_add_key test1 = mtree_head.add_hash(b1, b2);
-                    hash_add_key test2 = mtree_head.add_hash(b2, b3);
-                    uint32_t c1[8], c2[8], c3[8], c4[8];
-                    sha256(test1.ahash, 64, c1);
-                    sha256((uint8_t*)a3, 32, c2);
-                    sha256(test2.ahash, 64, c3);
-                    sha256((uint8_t*)b1, 32, c4);
-                    test1 = mtree_head.add_hash(c1, c2);
-                    test2 = mtree_head.add_hash(c3, c4);
-                    sha256(test1.ahash, 64, c1);
-                    sha256(test2.ahash, 64, c3);
-                    for(i=0;i<8;i++){
-                        printf("%x", c1[i]);
-                    }
-                    printf("\n");
-                    for(i=0;i<8;i++){
-                        printf("%x", c2[i]);
-                    }
-                    printf("\n");
- */
