@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 #include "M_tree.h"
 using namespace std;
 
@@ -33,13 +34,14 @@ int main(int argc, char *argv[]) {
                 cout << "**************** We are building the Merkle tree. Please wait... ****************" << endl;
                 mtree_head.folder_name1 = string(argv[1]);
                 mtree_head.build(argv[1], 1);
-                mtree_head.show(1);
+                mtree_head.show(1, 1);
                 break;
             }
             case '2':
             {
                 cout << "**************** We are updating the Merkle tree. Please wait... ****************" << endl;
-
+                mtree_head.update();
+                mtree_head.show(1, 2);
                 break;
             }
             case '3':

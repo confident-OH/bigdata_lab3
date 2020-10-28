@@ -176,7 +176,28 @@ void M_tree::build(char *folder, int n) {  //1: pNode; 2: olderpNode; 3: ofolder
 }
 
 void M_tree::update() {
-
+    file_names_ol = file_names_p;
+    point_ol = point_p;
+    vector<string> file_names;
+    file_names = open_folder((char*)folder_name1.c_str());
+    sort(file_names.begin(), file_names.end());
+    int n = file_names_ol.size();
+    int i;
+    vector<string>::iterator it;
+    for(i=0;i<n;i++){
+        it = find(file_names.begin(), file_names.end(), file_names_ol[i]);
+        if(it == file_names.end()){
+            delete_leaf(file_names_ol[i], 1);
+        }
+    }
+    n = file_names.size();
+    for(i=0;i<n;i++){
+        it = find(file_names_ol.begin(), file_names_ol.end(), file_names[i]);
+        if(it == file_names_ol.end()){
+            insert_leaf(file_names[i], 1);
+        }
+    }
+    file_names_p = file_names;
 }
 
 //append hash2 after hash1
@@ -211,11 +232,27 @@ void M_tree::delete_n(Node *node) {
     delete(node);
 }
 
-void M_tree::show(int n) {
+void M_tree::show(int n, int z) {
     int i, j, level=0;
     Node *show_head;
     ofstream outfile;
-    outfile.open("output.txt", ios::out);
+    switch (z) {
+        case 1:
+        {
+            outfile.open("output.txt", ios::out);
+            break;
+        }
+        case 2:
+        {
+            outfile.open("update.txt", ios::out);
+            break;
+        }
+        case 3:
+        {
+            outfile.open("output_tree2.txt", ios::out);
+            break;
+        }
+    }
     vector<Node*> hash1;
     vector<Node*> hash2;
     switch(n){
@@ -301,7 +338,7 @@ vector<string> M_tree::compare_tree(Node *n1, Node*n2) {
     return a1;
 }
 
-vector<string> M_tree::open_folder(char *folder) {
+vector<string> M_tree::open_folder(char* folder) {
     vector<string> file_names;
     DIR* d = opendir(folder);
     if (d == NULL)
@@ -313,11 +350,209 @@ vector<string> M_tree::open_folder(char *folder) {
     struct dirent* entry;
     while ( (entry=readdir(d)) != NULL)
     {
-        if(strcmp(entry->d_name, ".")&&strcmp(entry->d_name, "..")){
+        if(strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0){
             file_names.push_back(std::string(entry->d_name));
         }
     }
     closedir(d);
     return file_names;
+}
+
+void M_tree::delete_leaf(string key, int n) {
+    Node * item;
+    Node * up;
+    uint32_t newhash[8];
+    hash_add_key hasha;
+    switch (n) {
+        case 1:
+        {
+            int n = file_names_p.size();
+            for(int i=0;i<n;i++){
+                if(key == file_names_p[i]){
+                    item = point_p[i];
+                    point_p.erase(point_p.begin()+i);
+                    // finish delete (key)
+                    item = delete_one_leaf(item);
+                    // start update hash
+                    while (item!=NULL){
+                        if(item->right == NULL){
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            memcpy(hasha.ahash2, item->left->hashn, 32);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        else if(item->left == NULL){
+                            item->key.assign(item->right->key.begin(), item->right->key.end());
+                            memcpy(hasha.ahash2, item->right->hashn, 32);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        else{
+                            int j;
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            for (j=0;j<item->right->key.size();j++){
+                                item->key.push_back(item->right->key[j]);
+                            }
+                            hasha = add_hash(item->left->hashn, item->right->hashn);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        item = item->parent;
+                    }
+                    return;
+                }
+            }
+            break;
+        }
+        default:{
+            return;
+        }
+    }
+}
+
+void M_tree::insert_leaf(string key, int n) {
+    char byte_file[1024*1024];
+    Node * item;
+    Node * item2;
+    Node * leaff;
+    Node * up;
+    uint32_t newhash[8];
+    hash_add_key hasha;
+    switch (n) {
+        case 1:
+        {
+            int n = file_names_p.size();
+            for(int i=0;i<n;i++){
+                if(key < file_names_p[i]){
+                    // finish insert
+                    item = new(Node);
+                    item->right = NULL;
+                    item->left = NULL;
+                    item->key.push_back(key);
+                    ifstream file((string(folder_name1)+string("/")+key).c_str(), ios::in | ios::binary);
+                    if(!file){
+                        cout << "Failed open the file" << string(folder_name1)+string("/")+key << endl;
+                        continue;
+                    }
+                    memset(byte_file, 0, sizeof(byte_file));
+                    file.read(reinterpret_cast<char *>(&byte_file), sizeof(byte_file));
+                    cout << "inserting the file: " << key << endl;                //output the file names
+                    sha256((uint8_t*)byte_file,file.gcount(), item->hashn);
+                    file.close();
+                    leaff = point_p[i];
+                    point_p.insert(point_p.begin()+i, item);
+                    if(leaff->parent->left == leaff && leaff->parent->right == NULL){
+                        leaff->parent->right = item;
+                        item->parent = leaff->parent;
+                        item = item->parent;
+                    }
+                    else if(leaff->parent->right == leaff && leaff->parent->left == NULL){
+                        leaff->parent->left = item;
+                        item->parent = leaff->parent;
+                        item = item->parent;
+                    }
+                    else{
+                        if(leaff->parent->left == leaff){
+                            item2 = new(Node);
+                            item2->left = item;
+                            item2->right = leaff;
+                            item->parent = item2;
+                            item = item2;
+                            item2 = leaff->parent;
+                            leaff->parent = item;
+                            item2->left = item;
+                            int j;
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            for (j=0;j<item->right->key.size();j++){
+                                item->key.push_back(item->right->key[j]);
+                            }
+                            hasha = add_hash(item->left->hashn, item->right->hashn);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                            item = item2;
+                        }
+                        else{
+                            item2 = new(Node);
+                            item2->left = item;
+                            item2->right = leaff;
+                            item->parent = item2;
+                            item = item2;
+                            item2 = leaff->parent;
+                            leaff->parent = item;
+                            item2->right = item;
+                            int j;
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            for (j=0;j<item->right->key.size();j++){
+                                item->key.push_back(item->right->key[j]);
+                            }
+                            hasha = add_hash(item->left->hashn, item->right->hashn);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                            item = item2;
+                        }
+                    }
+                    // start update hash and keys
+                    while (item!=NULL){
+                        if(item->right == NULL){
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            memcpy(hasha.ahash2, item->left->hashn, 32);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        else if(item->left == NULL){
+                            item->key.assign(item->right->key.begin(), item->right->key.end());
+                            memcpy(hasha.ahash2, item->right->hashn, 32);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        else{
+                            int j;
+                            item->key.assign(item->left->key.begin(), item->left->key.end());
+                            for (j=0;j<item->right->key.size();j++){
+                                item->key.push_back(item->right->key[j]);
+                            }
+                            hasha = add_hash(item->left->hashn, item->right->hashn);
+                            sha256(hasha.ahash, 64, newhash);
+                            memcpy(item->hashn, newhash, 32);
+                        }
+                        item = item->parent;
+                    }
+                    return;
+                }
+            }
+            break;
+        }
+        default:{
+            return;
+        }
+    }
+}
+
+Node *M_tree::delete_one_leaf(Node *tail) {
+    Node* up = tail->parent;
+    while(up!=NULL){
+        if(tail == up->left && up->right == NULL){
+            delete(tail);
+            tail = up;
+            up->left = NULL;
+        }
+        else if(tail == up->right && up->left == NULL){
+            delete(tail);
+            tail = up;
+            up->right = NULL;
+        }
+        else{
+            if(tail == up->left){
+                up->left = NULL;
+            }
+            if(tail == up->right){
+                up->right = NULL;
+            }
+            delete(tail);
+            return up;
+        }
+        up = tail->parent;
+    }
+    return NULL;
 }
 

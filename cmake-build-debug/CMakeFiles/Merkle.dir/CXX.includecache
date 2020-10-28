@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/leo/CLionProjects/Merkle/M_tree.cpp
+M_tree.h
+/home/leo/CLionProjects/Merkle/M_tree.h
+
 /home/leo/CLionProjects/Merkle/M_tree.h
 sha256.h
 /home/leo/CLionProjects/Merkle/sha256.h
@@ -25,12 +29,6 @@ iostream
 -
 fstream
 -
-
-/home/leo/CLionProjects/Merkle/main.cpp
-iostream
--
-M_tree.h
-/home/leo/CLionProjects/Merkle/M_tree.h
 
 /home/leo/CLionProjects/Merkle/sha256.h
 stdio.h

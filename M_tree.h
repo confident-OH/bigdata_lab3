@@ -53,7 +53,10 @@ private:
     vector<Node*> point_p;
     vector<Node*> point_ol;
     vector<Node*> point_of;
-    vector<string> open_folder(char *folder);
+    vector<string> open_folder(char* folder);
+    void delete_leaf(string key, int n);
+    void insert_leaf(string key, int n);
+    Node* delete_one_leaf(Node *tail);
 public:
     string folder_name1;
     string folder_name2;
@@ -64,7 +67,7 @@ public:
     vector<string> compare_tree(Node *n1, Node *n2);
     void build(char *folder, int n);  //build a tree
     void delete_n (Node *node);
-    void show(int n);         //show the tree in the file output.txt
+    void show(int n, int z);         //show the tree in the file output.txt
     hash_add_key add_hash (uint32_t* hash1, uint32_t* hash2);   //add two hash
     bool hash_cmp(uint32_t* hash1, uint32_t*hash2);   //compare two hash
 
